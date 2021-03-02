@@ -1,8 +1,8 @@
 Package: CohortGenerator
 Type: Package
 Title: Used to generate OHDSI cohorts
-Version: 2.0.0
-Date: 2020-10-07
+Version: 0.0.1
+Date: 2021-03-01
 Authors@R: c(
     person("Anthony", "Sena", email = "asena5@its.jnj.com", role = c("aut", "cre")),
     person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut")),

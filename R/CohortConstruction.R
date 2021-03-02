@@ -321,24 +321,25 @@ instantiateCohortSet <- function(connectionDetails = NULL,
   on.exit(ParallelLogger::stopCluster(cluster), add = TRUE)
 
   # Apply the generation operation to the cluster
-  ParallelLogger::clusterApply(cluster,
-                               cohorts$cohortId,
-                               generateCohort,
-                               cohorts = cohorts,
-                               connectionDetails = connectionDetails,
-                               cdmDatabaseSchema = cdmDatabaseSchema,
-                               oracleTempSchema = oracleTempSchema,
-                               cohortDatabaseSchema = cohortDatabaseSchema,
-                               cohortTable = cohortTable,
-                               generateInclusionStats = generateInclusionStats,
-                               inclusionStatisticsFolder = inclusionStatisticsFolder,
-                               incremental = incremental,
-                               recordKeepingFile = recordKeepingFile,
-                               stopOnError = TRUE,
-                               progressBar = TRUE)
+  cohortsGenerated <- ParallelLogger::clusterApply(cluster,
+                                                   cohorts$cohortId,
+                                                   generateCohort,
+                                                   cohorts = cohorts,
+                                                   connectionDetails = connectionDetails,
+                                                   cdmDatabaseSchema = cdmDatabaseSchema,
+                                                   oracleTempSchema = oracleTempSchema,
+                                                   cohortDatabaseSchema = cohortDatabaseSchema,
+                                                   cohortTable = cohortTable,
+                                                   generateInclusionStats = generateInclusionStats,
+                                                   inclusionStatisticsFolder = inclusionStatisticsFolder,
+                                                   incremental = incremental,
+                                                   recordKeepingFile = recordKeepingFile,
+                                                   stopOnError = TRUE,
+                                                   progressBar = TRUE)
 
   delta <- Sys.time() - start
   writeLines(paste("Instantiating cohort set took", round(delta, 2), attr(delta, "units")))
+  return(cohortsGenerated)
 }
 
 #' @export

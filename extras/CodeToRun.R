@@ -1,3 +1,4 @@
+library(CohortGenerator)
 # Get the cohorts from the package
 cohortJsonFiles <- list.files(path = system.file("cohorts", package = "CohortGenerator"), full.names = TRUE)
 cohorts <- setNames(data.frame(matrix(ncol = 4, nrow = 0), stringsAsFactors = FALSE), c("cohortId","cohortFullName", "sql", "json"))
@@ -16,14 +17,14 @@ for (i in 1:length(cohortJsonFiles)) {
 
 outputFolder <- "E:/TEMP/CohortGenerator/Run"
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
-CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
+output <- CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
                                       cdmDatabaseSchema = "main",
                                       cohortDatabaseSchema = "main",
                                       cohortTable = "temp_cohort",
                                       cohorts = cohorts,
                                       createCohortTable = TRUE,
                                       generateInclusionStats = TRUE,
-                                      incremental = TRUE,
+                                      incremental = FALSE,
                                       incrementalFolder = file.path(outputFolder, "RecordKeeping"),
                                       inclusionStatisticsFolder = outputFolder)
 
