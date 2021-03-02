@@ -13,8 +13,8 @@ for (i in 1:length(cohortJsonFiles)) {
                                        json = cohortJson,
                                        stringsAsFactors = FALSE))
 }
-#View(cohorts)
-cohorts$foo <- "a"
+
+outputFolder <- "E:/TEMP/CohortGenerator/Run"
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
                                       cdmDatabaseSchema = "main",
@@ -24,5 +24,8 @@ CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
                                       createCohortTable = TRUE,
                                       generateInclusionStats = TRUE,
                                       incremental = TRUE,
-                                      incrementalFolder = "E:/TEMP/CohortGenerator/Run/RecordKeeping",
-                                      inclusionStatisticsFolder = "E:/TEMP/CohortGenerator/Run")
+                                      incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+                                      inclusionStatisticsFolder = outputFolder)
+
+# Cleanup Test Runs
+#unlink(outputFolder, recursive = T)

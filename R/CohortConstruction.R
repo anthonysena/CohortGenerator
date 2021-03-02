@@ -468,10 +468,12 @@ saveAndDropTempInclusionStatsTables <- function(connection,
                                                        snakeCaseToCamelCase = TRUE,
                                                        table = table)
     fullFileName <- file.path(inclusionStatisticsFolder, fileName)
-    if (incremental) {
-      saveIncremental(data, fullFileName, cohortDefinitionId = cohortIds)
-    } else {
-      readr::write_csv(x = data, file = fullFileName)
+    if(nrow(data) > 0) {
+      if (incremental) {
+        saveIncremental(data, fullFileName, cohortDefinitionId = cohortIds)
+      } else {
+        readr::write_csv(x = data, file = fullFileName)
+      }
     }
   }
   fetchStats("#cohort_inclusion", "cohortInclusion.csv", cohortIds)
