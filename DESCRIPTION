@@ -1,0 +1,40 @@
+Package: CohortGenerator
+Type: Package
+Title: Used to generate OHDSI cohorts
+Version: 2.0.0
+Date: 2020-10-07
+Authors@R: c(
+    person("Anthony", "Sena", email = "asena5@its.jnj.com", role = c("aut", "cre")),
+    person("Gowtham", "Rao", email = "gowthamrao@gmail.com", role = c("aut")),
+    person("Martijn", "Schuemie", email = "schuemie@ohdsi.org", role = c("aut")),
+    person("Observational Health Data Science and Informatics", role = c("cph"))
+  )
+Maintainer: Anthony Sena <asena5@its.jnj.com>
+Description: Package to generate cohorts from their OHDSI JSON representations and other functions related to cohort generation.
+Depends:
+	DatabaseConnector (>= 3.0.0),
+	CirceR (>= 1.0.0),
+	R (>= 3.5.0)
+Imports:
+  digest,
+  ParallelLogger (>= 2.0.0),
+  readr (>= 1.4.0),
+  rlang,
+  RJSONIO,
+  SqlRender (>= 1.6.7),
+  stringr,
+  methods
+Suggests:
+  Eunomia,
+  testthat,
+  RSQLite (>= 2.2.1),
+  zip
+Remotes:
+  ohdsi/CirceR
+License: Apache License
+VignetteBuilder: knitr
+URL: https://github.com/anthonysena/CohortGenerator
+BugReports: https://github.com/anthonysena/CohortGenerator/issues
+RoxygenNote: 7.1.1
+Encoding: UTF-8
+Language: en-US
