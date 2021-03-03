@@ -55,24 +55,22 @@ createCohortTable <- function(connectionDetails = NULL,
     connection <- DatabaseConnector::connect(connectionDetails)
     on.exit(DatabaseConnector::disconnect(connection))
   }
-  sql <- SqlRender::loadRenderTranslateSql("CreateCohortTable.sql",
-                                           packageName = "CohortGenerator",
-                                           dbms = connection@dbms,
-                                           cohort_database_schema = cohortDatabaseSchema,
-                                           cohort_table = cohortTable)
+  sql <- loadRenderTranslateSql("CreateCohortTable.sql",
+                                dbms = connection@dbms,
+                                cohort_database_schema = cohortDatabaseSchema,
+                                cohort_table = cohortTable)
   DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
   ParallelLogger::logDebug("- Created table ", cohortDatabaseSchema, ".", cohortTable)
 
   if (createInclusionStatsTables) {
     ParallelLogger::logInfo("Creating inclusion rule statistics tables")
-    sql <- SqlRender::loadRenderTranslateSql("CreateInclusionStatsTables.sql",
-                                             packageName = "CohortGenerator",
-                                             dbms = connectionDetails$dbms,
-                                             cohort_database_schema = resultsDatabaseSchema,
-                                             cohort_inclusion_table = cohortInclusionTable,
-                                             cohort_inclusion_result_table = cohortInclusionResultTable,
-                                             cohort_inclusion_stats_table = cohortInclusionStatsTable,
-                                             cohort_summary_stats_table = cohortSummaryStatsTable)
+    sql <- loadRenderTranslateSql("CreateInclusionStatsTables.sql",
+                                  dbms = connectionDetails$dbms,
+                                  cohort_database_schema = resultsDatabaseSchema,
+                                  cohort_inclusion_table = cohortInclusionTable,
+                                  cohort_inclusion_result_table = cohortInclusionResultTable,
+                                  cohort_inclusion_stats_table = cohortInclusionStatsTable,
+                                  cohort_summary_stats_table = cohortSummaryStatsTable)
     DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
     ParallelLogger::logDebug("- Created table ", cohortDatabaseSchema, ".", cohortInclusionTable)
     ParallelLogger::logDebug("- Created table ",
@@ -215,7 +213,7 @@ processInclusionStats <- function(inclusion,
 #'
 #' @template CohortTable
 #'
-#' @template OracleTempSchema
+#' @template TempEmulationSchema
 #'
 #' @template CdmDatabaseSchema
 #'
@@ -241,7 +239,7 @@ instantiateCohortSet <- function(connectionDetails = NULL,
                                  connection = NULL,
                                  numThreads = 1,
                                  cdmDatabaseSchema,
-                                 oracleTempSchema = NULL,
+                                 tempEmulationSchema = NULL,
                                  cohortDatabaseSchema = cdmDatabaseSchema,
                                  cohortTable = "cohort",
                                  cohorts = NULL,
@@ -327,7 +325,7 @@ instantiateCohortSet <- function(connectionDetails = NULL,
                                                    cohorts = cohorts,
                                                    connectionDetails = connectionDetails,
                                                    cdmDatabaseSchema = cdmDatabaseSchema,
-                                                   oracleTempSchema = oracleTempSchema,
+                                                   tempEmulationSchema = tempEmulationSchema,
                                                    cohortDatabaseSchema = cohortDatabaseSchema,
                                                    cohortTable = cohortTable,
                                                    generateInclusionStats = generateInclusionStats,
@@ -347,7 +345,7 @@ generateCohort <- function(cohortId = NULL,
                            cohorts,
                            connectionDetails = NULL,
                            cdmDatabaseSchema,
-                           oracleTempSchema,
+                           tempEmulationSchema,
                            cohortDatabaseSchema,
                            cohortTable,
                            generateInclusionStats,
@@ -365,7 +363,7 @@ generateCohort <- function(cohortId = NULL,
     on.exit(DatabaseConnector::disconnect(connection))
 
     if (generateInclusionStats) {
-      createTempInclusionStatsTables(connection, oracleTempSchema, cohorts)
+      createTempInclusionStatsTables(connection, tempEmulationSchema, cohorts)
     }
 
     # Log the operation
@@ -397,12 +395,12 @@ generateCohort <- function(cohortId = NULL,
     }
     sql <- SqlRender::translate(sql,
                                 targetDialect = connectionDetails$dbms,
-                                oracleTempSchema = oracleTempSchema)
+                                tempEmulationSchema = tempEmulationSchema)
     DatabaseConnector::executeSql(connection, sql)
 
     if (generateInclusionStats) {
       saveAndDropTempInclusionStatsTables(connection = connection,
-                                          oracleTempSchema = oracleTempSchema,
+                                          tempEmulationSchema = tempEmulationSchema,
                                           inclusionStatisticsFolder = inclusionStatisticsFolder,
                                           incremental = incremental,
                                           cohortIds = cohorts$cohortId[i])
@@ -420,12 +418,11 @@ generateCohort <- function(cohortId = NULL,
   }
 }
 
-createTempInclusionStatsTables <- function(connection, oracleTempSchema, cohorts) {
+createTempInclusionStatsTables <- function(connection, tempEmulationSchema, cohorts) {
   ParallelLogger::logInfo("Creating temporary inclusion statistics tables")
-  sql <- SqlRender::loadRenderTranslateSql("inclusionStatsTables.sql",
-                                           packageName = "CohortGenerator",
-                                           dbms = connection@dbms,
-                                           oracleTempSchema = oracleTempSchema)
+  sql <- loadRenderTranslateSql("inclusionStatsTables.sql",
+                                dbms = connection@dbms,
+                                tempEmulationSchema = tempEmulationSchema)
   DatabaseConnector::executeSql(connection, sql)
 
   inclusionRules <- data.frame(cohortDefinitionId = as.double(),
@@ -451,12 +448,12 @@ createTempInclusionStatsTables <- function(connection, oracleTempSchema, cohorts
                                  dropTableIfExists = TRUE,
                                  createTable = TRUE,
                                  tempTable = TRUE,
-                                 oracleTempSchema = oracleTempSchema,
+                                 tempEmulationSchema = tempEmulationSchema,
                                  camelCaseToSnakeCase = TRUE)
 }
 
 saveAndDropTempInclusionStatsTables <- function(connection,
-                                                oracleTempSchema,
+                                                tempEmulationSchema,
                                                 inclusionStatisticsFolder,
                                                 incremental,
                                                 cohortIds) {
@@ -465,7 +462,7 @@ saveAndDropTempInclusionStatsTables <- function(connection,
     sql <- "SELECT * FROM @table"
     data <- DatabaseConnector::renderTranslateQuerySql(sql = sql,
                                                        connection = connection,
-                                                       oracleTempSchema = oracleTempSchema,
+                                                       tempEmulationSchema = tempEmulationSchema,
                                                        snakeCaseToCamelCase = TRUE,
                                                        table = table)
     fullFileName <- file.path(inclusionStatisticsFolder, fileName)
@@ -497,7 +494,7 @@ saveAndDropTempInclusionStatsTables <- function(connection,
                                                sql = sql,
                                                progressBar = FALSE,
                                                reportOverallTime = FALSE,
-                                               oracleTempSchema = oracleTempSchema)
+                                               tempEmulationSchema = tempEmulationSchema)
 }
 
 .warnMismatchSqlInclusionStats <- function(sql, generateInclusionStats) {

@@ -28,5 +28,15 @@ output <- CohortGenerator::instantiateCohortSet(connectionDetails = connectionDe
                                       incrementalFolder = file.path(outputFolder, "RecordKeeping"),
                                       inclusionStatisticsFolder = outputFolder)
 
+output <- CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
+                                                cdmDatabaseSchema = "main",
+                                                cohortDatabaseSchema = "main",
+                                                cohortTable = "temp_cohort",
+                                                cohorts = cohorts,
+                                                createCohortTable = TRUE,
+                                                generateInclusionStats = TRUE,
+                                                incremental = TRUE,
+                                                incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+                                                inclusionStatisticsFolder = outputFolder)
 # Cleanup Test Runs
 #unlink(outputFolder, recursive = T)

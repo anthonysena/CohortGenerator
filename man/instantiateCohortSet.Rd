@@ -9,7 +9,7 @@ instantiateCohortSet(
   connection = NULL,
   numThreads = 1,
   cdmDatabaseSchema,
-  oracleTempSchema = NULL,
+  tempEmulationSchema = NULL,
   cohortDatabaseSchema = cdmDatabaseSchema,
   cohortTable = "cohort",
   cohorts = NULL,
@@ -39,8 +39,9 @@ this only supports single threaded operations.}
 Note that for SQL Server, this should include both the database and
 schema name, for example 'cdm_data.dbo'.}
 
-\item{oracleTempSchema}{Should be used in Oracle to specify a schema where the user has write
-privileges for storing temporary tables.}
+\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
+temp tables. To emulate temp tables, provide a schema with write
+privileges where temp tables can be created.}
 
 \item{cohortDatabaseSchema}{Schema name where your cohort table resides. Note that for SQL Server,
 this should include both the database and schema name, for example

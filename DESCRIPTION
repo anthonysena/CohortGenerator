@@ -10,9 +10,9 @@ Authors@R: c(
     person("Observational Health Data Science and Informatics", role = c("cph"))
   )
 Maintainer: Anthony Sena <asena5@its.jnj.com>
-Description: Package to generate cohorts from their OHDSI JSON representations and other functions related to cohort generation.
+Description: Package to generate cohorts and other functions related to cohort generation.
 Depends:
-	DatabaseConnector (>= 3.0.0),
+	DatabaseConnector (>= 4.0.0),
 	CirceR (>= 1.0.0),
 	R (>= 3.5.0)
 Imports:
@@ -21,11 +21,12 @@ Imports:
   readr (>= 1.4.0),
   rlang,
   RJSONIO,
-  SqlRender (>= 1.6.7),
+  SqlRender (>= 1.7.0),
   stringr,
   methods
 Suggests:
   Eunomia,
+  knitr,
   testthat,
   RSQLite (>= 2.2.1),
   zip

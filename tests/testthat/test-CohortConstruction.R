@@ -1,4 +1,5 @@
-library("testthat")
+library(testthat)
+library(CohortGenerator)
 
 # Test Prep ----------------
 cohortJsonFiles <- list.files(path = system.file("cohorts", package = "CohortGenerator"), full.names = TRUE)
@@ -41,37 +42,69 @@ test_that("Call instatiateCohortSet without connection or connectionDetails spec
 # Functional Tests ----------------
 connectionDetails <- Eunomia::getEunomiaConnectionDetails()
 
-# This test is causing issues whereby the CohortGenerator sql/sql_server
-# folder is not found during the test?
-# test_that("Create cohorts incrementally", {
+test_that("Create cohorts - Gen Stats = T, Incremental = F", {
+  outputFolder <- tempdir()
+  # Run first to ensure that all cohorts are generated
+  cohortsGenerated <- instantiateCohortSet(connectionDetails = connectionDetails,
+                                           cdmDatabaseSchema = "main",
+                                           cohortDatabaseSchema = "main",
+                                           cohortTable = "temp_cohort",
+                                           cohorts = cohorts,
+                                           createCohortTable = TRUE,
+                                           generateInclusionStats = TRUE,
+                                           incremental = FALSE,
+                                           incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+                                           inclusionStatisticsFolder = outputFolder)
+  expect_equal(length(cohortsGenerated), nrow(cohorts))
+  unlink(outputFolder)
+})
+
+test_that("Create cohorts - Gen Stats = T, Incremental = T", {
+  outputFolder <- tempdir()
+  # Run first to ensure that all cohorts are generated
+  cohortsGenerated <- instantiateCohortSet(connectionDetails = connectionDetails,
+                                           cdmDatabaseSchema = "main",
+                                           cohortDatabaseSchema = "main",
+                                           cohortTable = "temp_cohort",
+                                           cohorts = cohorts,
+                                           createCohortTable = TRUE,
+                                           generateInclusionStats = TRUE,
+                                           incremental = FALSE,
+                                           incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+                                           inclusionStatisticsFolder = outputFolder)
+  # Next run using incremental mode to verify that all cohorts are created
+  # but the return indicates that nothing new was generated
+  cohortsGenerated <- instantiateCohortSet(connectionDetails = connectionDetails,
+                                           cdmDatabaseSchema = "main",
+                                           cohortDatabaseSchema = "main",
+                                           cohortTable = "temp_cohort",
+                                           cohorts = cohorts,
+                                           createCohortTable = TRUE,
+                                           generateInclusionStats = TRUE,
+                                           incremental = TRUE,
+                                           incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+                                           inclusionStatisticsFolder = outputFolder)
+  expect_equal(length(cohortsGenerated), nrow(cohorts))
+  unlink(outputFolder)
+})
+
+# test_that("Create cohorts - Gen Stats = F, Incremental = F", {
 #   outputFolder <- tempdir()
 #   # Run first to ensure that all cohorts are generated
-#   cohortsGenerated <- CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
-#                                                             cdmDatabaseSchema = "main",
-#                                                             cohortDatabaseSchema = "main",
-#                                                             cohortTable = "temp_cohort",
-#                                                             cohorts = cohorts,
-#                                                             createCohortTable = TRUE,
-#                                                             generateInclusionStats = TRUE,
-#                                                             incremental = FALSE,
-#                                                             incrementalFolder = file.path(outputFolder, "RecordKeeping"),
-#                                                             inclusionStatisticsFolder = outputFolder)
+#   cohortsGenerated <- instantiateCohortSet(connectionDetails = connectionDetails,
+#                                            cdmDatabaseSchema = "main",
+#                                            cohortDatabaseSchema = "main",
+#                                            cohortTable = "temp_cohort",
+#                                            cohorts = cohorts,
+#                                            createCohortTable = TRUE,
+#                                            generateInclusionStats = FALSE,
+#                                            incremental = FALSE,
+#                                            incrementalFolder = file.path(outputFolder, "RecordKeeping"),
+#                                            inclusionStatisticsFolder = outputFolder)
 #   expect_equal(length(cohortsGenerated), nrow(cohorts))
-#   # Next run using incremental mode to verify that all cohorts are created
-#   # but the return indicates that nothing new was generated
-#   cohortsGenerated <- CohortGenerator::instantiateCohortSet(connectionDetails = connectionDetails,
-#                                                             cdmDatabaseSchema = "main",
-#                                                             cohortDatabaseSchema = "main",
-#                                                             cohortTable = "temp_cohort",
-#                                                             cohorts = cohorts,
-#                                                             createCohortTable = TRUE,
-#                                                             generateInclusionStats = TRUE,
-#                                                             incremental = TRUE,
-#                                                             incrementalFolder = file.path(outputFolder, "RecordKeeping"),
-#                                                             inclusionStatisticsFolder = outputFolder)
-#   expect_equal(length(cohortsGenerated), 0)
-#   unlink(outputFolder, recursive = TRUE)
+#   unlink(outputFolder)
 # })
 
+
 # Remove the Eunomia database:
-unlink(connectionDetails$server)
+rm(connectionDetails)
