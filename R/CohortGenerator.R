@@ -18,8 +18,9 @@
 "_PACKAGE"
 
 #' @import DatabaseConnector
+#' @import CirceR
 #' @importFrom grDevices rgb
-#' @importFrom stats aggregate
+#' @importFrom stats aggregate setNames
 #' @importFrom utils write.csv install.packages menu unzip packageVersion sessionInfo
 #' @importFrom rlang .data
 #' @importFrom SqlRender loadRenderTranslateSql

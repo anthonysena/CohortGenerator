@@ -16,14 +16,16 @@ Depends:
 	CirceR (>= 1.0.0),
 	R (>= 3.5.0)
 Imports:
-  digest,
-  ParallelLogger (>= 2.0.0),
-  readr (>= 1.4.0),
-  rlang,
-  RJSONIO,
-  SqlRender (>= 1.7.0),
-  stringr,
-  methods
+    digest,
+    ParallelLogger (>= 2.0.0),
+    readr (>= 1.4.0),
+    rlang,
+    RJSONIO,
+    SqlRender (>= 1.7.0),
+    methods,
+    dplyr,
+    tibble,
+    stats
 Suggests:
   Eunomia,
   knitr,

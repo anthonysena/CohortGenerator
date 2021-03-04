@@ -2,7 +2,7 @@
 % Please edit documentation in R/CohortConstruction.R
 \name{instantiateCohortSet}
 \alias{instantiateCohortSet}
-\title{Instantiate a set of cohort}
+\title{Instantiate a set of cohorts}
 \usage{
 instantiateCohortSet(
   connectionDetails = NULL,
@@ -12,8 +12,7 @@ instantiateCohortSet(
   tempEmulationSchema = NULL,
   cohortDatabaseSchema = cdmDatabaseSchema,
   cohortTable = "cohort",
-  cohorts = NULL,
-  generateInclusionStats = FALSE,
+  cohortSet = NULL,
   inclusionStatisticsFolder = NULL,
   createCohortTable = FALSE,
   incremental = FALSE,
@@ -49,15 +48,19 @@ this should include both the database and schema name, for example
 
 \item{cohortTable}{Name of the cohort table.}
 
-\item{cohorts}{A data.frame containing the cohort set to instantiate. This data
-frame must include the following columns: cohortId, cohortFullName,
-sql and json. The json column must represent a circe cohort definition
-construction to.}
-
-\item{generateInclusionStats}{Compute and store inclusion rule statistics?}
+\item{cohortSet}{The \code{cohortSet} argument must be a data frame with 
+the following columns: \describe{\item{cohortId}{The 
+unique integer identifier of the cohort} 
+\item{cohortFullName}{The cohort's full name}
+\item{sql}{The OHDSI-SQL used to instantiate the cohort}
+\item{json}{The json column must represent a Circe cohort 
+definition. This field is only required when you would 
+like to generate a cohort that includes inclusion statistics
+since the names of the inclusion rules are parsed from 
+this JSON property.} }}
 
 \item{inclusionStatisticsFolder}{The folder where the inclusion rule statistics are stored. Can be
-left NULL if \code{generateInclusionStats = FALSE}.}
+left NULL if you do not wish to export the inclusion rule statistics}
 
 \item{createCohortTable}{Create the cohort table? If \code{incremental = TRUE} and the
 table already exists this will be skipped.}
@@ -66,52 +69,9 @@ table already exists this will be skipped.}
 
 \item{incrementalFolder}{If \code{incremental = TRUE}, specify a folder where records are
 kept of which definition has been executed.}
-
-\item{packageName}{The name of the package containing the cohort definitions. Can be left
-NULL if \code{baseUrl} and \code{cohortSetReference} have been
-specified.}
-
-\item{cohortToCreateFile}{The location of the cohortToCreate file within the package. Is ignored
-if \code{baseUrl} and \code{cohortSetReference} have been specified. The
-cohortToCreateFile must be .csv file that is expected to be read into a
-dataframe object identical to requirements for \code{cohortSetReference}
-argument. This csv file is expected to be encoded in either ASCII or
-UTF-8, if not, an error message will be displayed and process stopped.}
-
-\item{baseUrl}{The base URL for the WebApi instance, for example:
-"http://server.org:80/WebAPI". Can be left NULL if \code{packageName}
-and \code{cohortToCreateFile} have been specified.}
-
-\item{cohortSetReference}{A data frame with four columns, as described in the details. Can be left
-NULL if \code{packageName} and \code{cohortToCreateFile} have been
-specified.}
 }
 \description{
-This function instantiates a set of cohort in the cohort table, using definitions that are fetched
-from a WebApi interface. Optionally, the inclusion rule statistics are computed and stored in the
+This function instantiates a set of cohorts in the cohort table and where
+specified the inclusion rule statistics are computed and stored in the
 \code{inclusionStatisticsFolder}.
-}
-\details{
-Currently two ways of executing this function are supported, either (1) [Package Mode] embedded in
-a study package, assuming the cohort definitions are stored in that package using the
-\code{ROhdsiWebApi::insertCohortDefinitionSetInPackage}, or (2) [WebApi Mode] By using a WebApi
-interface to retrieve the cohort definitions.
-When using this function in Package Mode: Use the \code{packageName} and \code{cohortToCreateFile}
-to specify the name of the study package, and the name of the cohortToCreate file within that
-package, respectively
-When using this function in WebApi Mode: use the \code{baseUrl} and \code{cohortSetReference} to
-specify how to connect to the WebApi, and which cohorts to fetch, respectively.
-Note: if the parameters for both Package Mode and WebApi Mode are provided, then Package mode is
-preferred.
-
-The \code{cohortSetReference} argument must be a data frame with the following columns: \describe{
-\item{referentConceptId}{A standard omop concept id that serves as the referant phenotype
-definition for the cohort Id.} \item{cohortId}{The cohort Id is the id used to identify a cohort
-definition. This is required to be unique. It will be used to create file names. It is recommended
-to be (referrentConceptId * 1000) + a number between 3 to 999} \item{webApiCohortId}{Cohort Id in
-the webApi/atlas instance. It is a required field to run Cohort Diagnostics in WebApi mode. It is
-discarded in package mode.} \item{cohortName}{The full name of the cohort. This will be shown in
-the Shiny app.} \item{logicDescription}{A human understandable brief description of the cohort
-definition. This logic does not have to a fully specified description of the cohort definition, but
-should provide enough context to help user understand the meaning of the cohort definition} }
 }

@@ -2,9 +2,7 @@
 % Please edit documentation in R/HelperFunctions.R
 \name{loadRenderTranslateSql}
 \alias{loadRenderTranslateSql}
-\title{Load, render, and translate a SQL file in this package.
-This is done in place of using SqlRender::loadRenderTranslateSql
-otherwise unit tests will not function properly.}
+\title{Load, render, and translate a SQL file in this package.}
 \usage{
 loadRenderTranslateSql(
   sqlFilename,
@@ -14,7 +12,30 @@ loadRenderTranslateSql(
   warnOnMissingParameters = TRUE
 )
 }
+\arguments{
+\item{sqlFilename}{The source SQL file}
+
+\item{dbms}{The target dialect. Currently 'sql server', 'oracle', 'postgres',
+and 'redshift' are supported}
+
+\item{...}{Parameter values used for \code{render}}
+
+\item{tempEmulationSchema}{Some database platforms like Oracle and Impala do not truly support
+temp tables. To emulate temp tables, provide a schema with write
+privileges where temp tables can be created.}
+
+\item{warnOnMissingParameters}{Should a warning be raised when parameters provided to this
+function do not appear in the parameterized SQL that is being
+rendered? By default, this is TRUE.}
+}
+\value{
+Returns a string containing the rendered SQL.
+}
 \description{
+This helper function is used in place of 
+using \code{SqlRender::loadRenderTranslateSql}
+otherwise unit tests will not function properly. 
+
 NOTE: This function does not support dialect-specific SQL translation
 at this time.
 }
