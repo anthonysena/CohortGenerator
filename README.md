@@ -1,6 +1,6 @@
 # CohortGenerator
 
-[![Build Status](https://github.com/anthonysena/CohortGenerator/workflows/R-CMD-check/badge.svg)](https://github.com/anthonysena/CohortGenerator/actions?query=workflow%3AR-CMD-check) [![codecov.io](https://codecov.io/github/anthonysena/CohortGenerator/coverage.svg?branch=master)](https://codecov.io/github/anthonysena/CohortGenerator?branch=master)
+[![Build Status](https://github.com/OHDSI/CohortGenerator/workflows/R-CMD-check/badge.svg)](https://github.com/OHDSI/CohortGenerator/actions?query=workflow%3AR-CMD-check) [![codecov.io](https://codecov.io/github/OHDSI/CohortGenerator/coverage.svg?branch=master)](https://codecov.io/github/OHDSI/CohortGenerator?branch=master)
 
 CohortGenerator is part of [HADES](https://ohdsi.github.io/Hades/).
 
@@ -73,7 +73,6 @@ Documentation can be found on the [package website](https://ohdsi.github.io/Coho
 
 PDF versions of the documentation are also available:
 
--   Vignette: [Effect estimate using non-normal likelihood approximations](https://raw.githubusercontent.com/OHDSI/CohortGenerator/master/extras/NonNormalEffectSynthesis.pdf)
 -   Package manual: [CohortGenerator.pdf](https://raw.githubusercontent.com/OHDSI/CohortGenerator/master/extras/CohortGenerator.pdf)
 
 # Support

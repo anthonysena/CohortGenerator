@@ -16,7 +16,7 @@ in the incremental record keeping file}
 keeping information.}
 
 \item{verbose}{When TRUE, this function will output if a particular operation
-has completed based on inspecing the recordKeepingFile.}
+has completed based on inspecting the recordKeepingFile.}
 }
 \value{
 Returns TRUE if the operation has completed according to the contents of

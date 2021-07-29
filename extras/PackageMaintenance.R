@@ -21,15 +21,11 @@ OhdsiRTools::formatRFolder("./R") #(note: this function has been impacted by cha
 OhdsiRTools::checkUsagePackage("CohortGenerator")
 OhdsiRTools::updateCopyrightYearFolder()
 devtools::spell_check()
-spelling::spell_check_files(list.files(path = "inst/shiny",
-                                       pattern = "*.html",
-                                       recursive = TRUE,
-                                       full.names = TRUE))
 
 
 # Create manual and vignettes:
-unlink("extras/CohortDiagnostics.pdf")
-shell("R CMD Rd2pdf ./ --output=extras/CohortDiagnostics.pdf")
+unlink("extras/CohortGenerator.pdf")
+shell("R CMD Rd2pdf ./ --output=extras/CohortGenerator.pdf")
 
 dir.create(path = "./inst/doc/", showWarnings = FALSE)
 rmarkdown::render("vignettes/CohortDiagnosticsUsingWebApi.Rmd",

@@ -4,14 +4,15 @@
 \name{CohortGenerator-package}
 \alias{CohortGenerator}
 \alias{CohortGenerator-package}
-\title{CohortGenerator: Used to generate OHDSI cohorts}
+\title{CohortGenerator: An R package for cohort generation against the OMOP CDM}
 \description{
-Package to generate cohorts and other functions related to cohort generation.
+An R package for that encapsulates the functions for generating cohorts against the OMOP CDM. This package allow for the use of SQL generated using CIRCE-compliant JSON or custom SQL.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/anthonysena/CohortGenerator}
+  \item \url{https://ohdsi.github.io/CohortGenerator/}
+  \item \url{https://github.com/OHDSI/CohortGenerator}
   \item Report bugs at \url{https://github.com/anthonysena/CohortGenerator/issues}
 }
 

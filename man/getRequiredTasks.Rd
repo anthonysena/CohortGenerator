@@ -2,7 +2,7 @@
 % Please edit documentation in R/Incremental.R
 \name{getRequiredTasks}
 \alias{getRequiredTasks}
-\title{Get a list of task stiaareqask required when running in incremental mode}
+\title{Get a list of tasks required when running in incremental mode}
 \usage{
 getRequiredTasks(..., checksum, recordKeepingFile)
 }

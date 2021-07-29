@@ -48,7 +48,7 @@ computeChecksum <- function(val) {
 #'                             keeping information.
 #'                             
 #' @param verbose   When TRUE, this function will output if a particular operation
-#'                  has completed based on inspecing the recordKeepingFile.
+#'                  has completed based on inspecting the recordKeepingFile.
 #'
 #' @return
 #' Returns TRUE if the operation has completed according to the contents of
@@ -80,7 +80,7 @@ isTaskRequired <- function(..., checksum, recordKeepingFile, verbose = TRUE) {
   }
 }
 
-#' Get a list of task stiaareqask required when running in incremental mode
+#' Get a list of tasks required when running in incremental mode
 #'
 #' @description
 #' This function will attempt to check the \code{recordKeepingFile}
