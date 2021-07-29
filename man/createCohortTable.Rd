@@ -54,6 +54,9 @@ inclusion rule statistics.}
 
 \item{cohortSummaryStatsTable}{Name of the summary stats table, one of the tables for storing
 inclusion rule statistics.}
+
+\item{cohortCensorStatsTable}{Name of the censor stats table, one of the tables for storing
+inclusion rule statistics.}
 }
 \description{
 This function creates an empty cohort table. Optionally, additional empty tables are created to

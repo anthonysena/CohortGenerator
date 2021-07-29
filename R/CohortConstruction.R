@@ -37,6 +37,8 @@
 #'                                     inclusion rule statistics.
 #' @param cohortSummaryStatsTable      Name of the summary stats table, one of the tables for storing
 #'                                     inclusion rule statistics.
+#' @param cohortCensorStatsTable       Name of the censor stats table, one of the tables for storing
+#'                                     inclusion rule statistics.
 #'
 #' @export
 createCohortTable <- function(connectionDetails = NULL,

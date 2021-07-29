@@ -20,8 +20,8 @@
 OhdsiRTools::formatRFolder("./R") #(note: this function has been impacted by change in formatR)
 OhdsiRTools::checkUsagePackage("CohortGenerator")
 OhdsiRTools::updateCopyrightYearFolder()
+devtools::document()
 devtools::spell_check()
-
 
 # Create manual and vignettes:
 unlink("extras/CohortGenerator.pdf")
