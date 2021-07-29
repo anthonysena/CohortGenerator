@@ -121,7 +121,8 @@ test_that("Create cohort table and inclusion stats table with connection", {
                           cohortInclusionTable = "test_cohort_inc",
                           cohortInclusionResultTable = "test_cohort_inc_result",
                           cohortInclusionStatsTable = "test_cohort_inc_stats",
-                          cohortSummaryStatsTable = "test_cohort_summary")
+                          cohortSummaryStatsTable = "test_cohort_summary",
+                          cohortCensorStatsTable = "test_cohort_censor_stats")
   createCohortTable(connection = conn,
                     cohortTable = tableList$cohortTable,
                     cohortDatabaseSchema = "main",
@@ -129,7 +130,8 @@ test_that("Create cohort table and inclusion stats table with connection", {
                     cohortInclusionTable = tableList$cohortInclusionTable,
                     cohortInclusionResultTable = tableList$cohortInclusionResultTable,
                     cohortInclusionStatsTable = tableList$cohortInclusionStatsTable,
-                    cohortSummaryStatsTable = tableList$cohortSummaryStatsTable)
+                    cohortSummaryStatsTable = tableList$cohortSummaryStatsTable,
+                    cohortCensorStatsTable = tableList$cohortCensorStatsTable)
   
   for(i in colnames(tableList)) {
     sql <- paste("SELECT * FROM", tableList[[i]], ";")

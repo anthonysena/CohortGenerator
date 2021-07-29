@@ -48,7 +48,8 @@ createCohortTable <- function(connectionDetails = NULL,
                               cohortInclusionTable = paste0(cohortTable, "_inclusion"),
                               cohortInclusionResultTable = paste0(cohortTable, "_inclusion_result"),
                               cohortInclusionStatsTable = paste0(cohortTable, "_inclusion_stats"),
-                              cohortSummaryStatsTable = paste0(cohortTable, "_summary_stats")) {
+                              cohortSummaryStatsTable = paste0(cohortTable, "_summary_stats"),
+                              cohortCensorStatsTable = paste0(cohortTable, "_censor_stats")) {
   if (is.null(connection) && is.null(connectionDetails)) {
     stop("You must provide either a database connection or the connection details.")
   }
@@ -74,7 +75,8 @@ createCohortTable <- function(connectionDetails = NULL,
                                   cohort_inclusion_table = cohortInclusionTable,
                                   cohort_inclusion_result_table = cohortInclusionResultTable,
                                   cohort_inclusion_stats_table = cohortInclusionStatsTable,
-                                  cohort_summary_stats_table = cohortSummaryStatsTable)
+                                  cohort_summary_stats_table = cohortSummaryStatsTable,
+                                  cohort_censor_stats_table = cohortCensorStatsTable)
     DatabaseConnector::executeSql(connection, sql, progressBar = FALSE, reportOverallTime = FALSE)
     ParallelLogger::logDebug("- Created table ", cohortDatabaseSchema, ".", cohortInclusionTable)
     ParallelLogger::logDebug("- Created table ",
@@ -302,7 +304,8 @@ generateCohort <- function(cohortId = NULL,
                                results_database_schema.cohort_inclusion = "#cohort_inclusion",
                                results_database_schema.cohort_inclusion_result = "#cohort_inc_result",
                                results_database_schema.cohort_inclusion_stats = "#cohort_inc_stats",
-                               results_database_schema.cohort_summary_stats = "#cohort_summary_stats")
+                               results_database_schema.cohort_summary_stats = "#cohort_summary_stats",
+                               results_database_schema.cohort_censor_stats = "#cohort_censor_stats")
     } else {
       sql <- SqlRender::render(sql,
                                cdm_database_schema = cdmDatabaseSchema,
@@ -338,7 +341,7 @@ generateCohort <- function(cohortId = NULL,
 
 createTempInclusionStatsTables <- function(connection, tempEmulationSchema, cohortJson, cohortId) {
   ParallelLogger::logInfo("Creating temporary inclusion statistics tables")
-  sql <- loadRenderTranslateSql("inclusionStatsTables.sql",
+  sql <- loadRenderTranslateSql("CreateInclusionStatsTempTables.sql",
                                 dbms = connection@dbms,
                                 tempEmulationSchema = tempEmulationSchema)
   DatabaseConnector::executeSql(connection, sql)
@@ -395,7 +398,8 @@ saveAndDropTempInclusionStatsTables <- function(connection,
   fetchStats("#cohort_inc_result", "cohortIncResult.csv", cohortIds)
   fetchStats("#cohort_inc_stats", "cohortIncStats.csv", cohortIds)
   fetchStats("#cohort_summary_stats", "cohortSummaryStats.csv", cohortIds)
-
+  fetchStats("#cohort_censor_stats", "cohortCensorStats.csv", cohortIds)
+  
   sql <- "TRUNCATE TABLE #cohort_inclusion;
   DROP TABLE #cohort_inclusion;
 
@@ -406,7 +410,11 @@ saveAndDropTempInclusionStatsTables <- function(connection,
   DROP TABLE #cohort_inc_stats;
 
   TRUNCATE TABLE #cohort_summary_stats;
-  DROP TABLE #cohort_summary_stats;"
+  DROP TABLE #cohort_summary_stats;
+  
+  TRUNCATE TABLE #cohort_censor_stats;
+  DROP TABLE #cohort_censor_stats;"
+  
   DatabaseConnector::renderTranslateExecuteSql(connection = connection,
                                                sql = sql,
                                                progressBar = FALSE,
@@ -430,7 +438,5 @@ saveAndDropTempInclusionStatsTables <- function(connection,
 #'              inclusion rule statistics in addition to the cohort.
 sqlContainsInclusionRuleStats <- function(sql) {
   sql <- SqlRender::render(sql, warnOnMissingParameters = FALSE)
-  return (grepl("(@results_database_schema.cohort_inclusion_result)", sql) &&
-     grepl("(@results_database_schema.cohort_inclusion_stats)", sql) &&
-     grepl("(@results_database_schema.cohort_summary_stats)", sql))
+  return (grepl("(@results_database_schema.cohort_censor_stats)", sql))
 }

@@ -27,23 +27,5 @@ devtools::spell_check()
 unlink("extras/CohortGenerator.pdf")
 shell("R CMD Rd2pdf ./ --output=extras/CohortGenerator.pdf")
 
-dir.create(path = "./inst/doc/", showWarnings = FALSE)
-rmarkdown::render("vignettes/CohortDiagnosticsUsingWebApi.Rmd",
-                  output_file = "../inst/doc/CohortDiagnosticsUsingWebApi.pdf",
-                  rmarkdown::pdf_document(latex_engine = "pdflatex",
-                                          toc = TRUE,
-                                          number_sections = TRUE))
-
 pkgdown::build_site()
 OhdsiRTools::fixHadesLogo()
-
-# Regenerate DDL
-pathToCsv <- file.path("inst", "settings", "resultsDataModelSpecification.csv")
-specifications <- readr::read_csv(file = pathToCsv, col_types = readr::cols())
-source("extras/ResultsDataModel.R")
-createDdl("inst/sql/postgresql/CreateResultsDataModel.sql", specifications)
-
-# Copy data model specs to Shiny app
-file.copy(from = "inst/settings/resultsDataModelSpecification.csv",
-          to = "inst/shiny/DiagnosticsExplorer/resultsDataModelSpecification.csv",
-          overwrite = TRUE)

@@ -14,7 +14,8 @@ createCohortTable(
   cohortInclusionTable = paste0(cohortTable, "_inclusion"),
   cohortInclusionResultTable = paste0(cohortTable, "_inclusion_result"),
   cohortInclusionStatsTable = paste0(cohortTable, "_inclusion_stats"),
-  cohortSummaryStatsTable = paste0(cohortTable, "_summary_stats")
+  cohortSummaryStatsTable = paste0(cohortTable, "_summary_stats"),
+  cohortCensorStatsTable = paste0(cohortTable, "_censor_stats")
 )
 }
 \arguments{
