@@ -34,8 +34,9 @@ for (i in 1:length(cohortJsonFiles)) {
                                                        stringsAsFactors = FALSE))
 }
 
-# Instantiate the cohort set against Eunomia. cohortGenerated
-# contains a list of the cohortIds generated against CDM
+# Instantiate the cohort set against Eunomia. 
+# cohortGenerated contains a list of the cohortIds 
+# successfully generated against the CDM
 outputFolder <- "C:/TEMP"
 cohortsGenerated <- instantiateCohortSet(connectionDetails = Eunomia::getEunomiaConnectionDetails(),
                                          cdmDatabaseSchema = "main",
@@ -46,7 +47,6 @@ cohortsGenerated <- instantiateCohortSet(connectionDetails = Eunomia::getEunomia
                                          incremental = TRUE,
                                          incrementalFolder = file.path(outputFolder, "RecordKeeping"),
                                          inclusionStatisticsFolder = outputFolder)
-#> Error in instantiateCohortSet(connectionDetails = Eunomia::getEunomiaConnectionDetails(), : could not find function "instantiateCohortSet"
 ```
 
 # Technology
@@ -55,7 +55,7 @@ This an R package with some dependencies requiring Java.
 
 # System requirements
 
-Requires R and Java.
+Requires R and Java for the CirceR dependency.
 
 # Getting Started
 
